@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<title>PMO Charter · Onepager · Avila Tek</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --c-bg: #f4f1e8;
+    --c-paper: #fbf9f2;
+    --c-ink: #0d1f14;
+    --c-ink-soft: #2c3a31;
+    --c-mute: #5d6b62;
+    --c-line: #d8d2c0;
+    --c-forest: #0e4d28;
+    --c-green: #1a7a3a;
+    --c-lime: #6abf2a;
+    --c-lime-soft: #c2e09b;
+    --font-serif: "Instrument Serif", "Times New Roman", serif;
+    --font-sans: "Geist", -apple-system, sans-serif;
+    --font-mono: "Geist Mono", ui-monospace, monospace;
+  }
+  html.dark {
+    --c-bg: #0a1410;
+    --c-paper: #0f1c15;
+    --c-ink: #f0ead6;
+    --c-ink-soft: #cfd6cd;
+    --c-mute: #8a978d;
+    --c-line: #1f3024;
+    --c-forest: #2e9550;
+    --c-green: #57c46b;
+    --c-lime: #9ee84a;
+    --c-lime-soft: #2a3f1f;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: #1a1a1a;
+    font-family: var(--font-sans);
+  }
+  body {
+    min-height: 100vh;
+    display: flex; align-items: flex-start; justify-content: center;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  /* The page is a fixed-size canvas — JS scales it to fit viewport */
+  .stage {
+    transform-origin: top left;
+  }
+  .page {
+    width: 1920px;
+    height: 1920px;
+    background: var(--c-bg);
+    color: var(--c-ink);
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-rows: 150px 1fr;
+    padding: 48px 56px 48px;
+    gap: 20px;
+    transition: background 0.3s, color 0.3s;
+  }
+  /* ============ HEADER ============ */
+  .pg-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    border-bottom: 1.5px solid var(--c-ink);
+    padding-bottom: 18px;
+    position: relative;
+    gap: 32px;
+  }
+  html.dark .pg-header { border-bottom-color: var(--c-ink-soft); }
+  .pg-header .left { display: flex; flex-direction: column; gap: 14px; }
+  .pg-header .top-row {
+    display: flex; align-items: center; gap: 18px;
+  }
+  .pg-header .logo {
+    display: flex; align-items: center; gap: 14px;
+  }
+  .pg-header .logo img { height: 38px; }
+  html.dark .pg-header .logo img { filter: brightness(0) invert(0.85) sepia(0.4) saturate(3) hue-rotate(50deg); }
+  .pg-header .pill {
+    font-family: var(--font-mono);
+    font-size: 13px; letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--c-forest);
+    border: 1px solid var(--c-forest);
+    padding: 6px 12px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  html.dark .pg-header .pill { color: var(--c-lime); border-color: var(--c-lime); }
+  .pg-header h1 {
+    font-family: var(--font-serif);
+    font-size: 96px; line-height: 0.9;
+    letter-spacing: -0.03em;
+    color: var(--c-ink);
+    font-weight: 400;
+  }
+  .pg-header h1 em { font-style: italic; color: var(--c-forest); }
+  html.dark .pg-header h1 em { color: var(--c-lime); }
+  .pg-header .meta {
+    text-align: right;
+    display: flex; flex-direction: column; gap: 10px;
+    align-items: flex-end;
+  }
+  .pg-header .meta .stripe {
+    display: flex; gap: 0;
+    border: 1px solid var(--c-line);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--c-paper);
+  }
+  .pg-header .meta .cell {
+    padding: 10px 18px;
+    border-right: 1px solid var(--c-line);
+    text-align: left;
+    min-width: 130px;
+  }
+  .pg-header .meta .cell:last-child { border-right: none; }
+  .pg-header .meta .cell .label {
+    font-family: var(--font-mono);
+    font-size: 10px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--c-mute);
+    margin-bottom: 4px;
+  }
+  .pg-header .meta .cell .value {
+    font-family: var(--font-serif);
+    font-size: 22px; line-height: 1.1;
+    color: var(--c-ink);
+    white-space: nowrap;
+  }
+  .pg-header .meta .cell .value em { font-style: italic; color: var(--c-forest); }
+  html.dark .pg-header .meta .cell .value em { color: var(--c-lime); }
+  .pg-header .meta .dept {
+    font-family: var(--font-mono);
+    font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--c-mute);
+    white-space: nowrap;
+  }
+
+  /* ============ BODY GRID ============ */
+  .pg-body {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr 1.05fr;
+    gap: 18px;
+    grid-template-areas:
+      "purpose values objectives"
+      "scope   values clients"
+      "vision  values clients"
+      "roadmap roadmap roadmap"
+      "kpis    kpis    kpis";
+    grid-template-rows: 1fr 1fr 1fr 155px 160px;
+    height: 100%;
+  }
+
+  /* Block (panel) styles */
+  .panel {
+    background: var(--c-paper);
+    border: 1px solid var(--c-line);
+    border-radius: 12px;
+    padding: 14px 18px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .panel .panel-head {
+    display: flex; align-items: center; gap: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--c-line);
+  }
+  .panel .badge {
+    width: 26px; height: 26px; border-radius: 6px;
+    background: var(--c-forest); color: var(--c-paper);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 12px; font-weight: 600;
+    letter-spacing: 0.02em;
+    flex-shrink: 0;
+  }
+  html.dark .panel .badge { background: var(--c-lime); color: #07291a; }
+  .panel .panel-title {
+    font-family: var(--font-mono);
+    font-size: 11px; letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--c-ink);
+    font-weight: 500;
+  }
+  .panel .panel-sub {
+    font-family: var(--font-mono);
+    font-size: 10px; letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--c-mute);
+    margin-left: auto;
+  }
+
+  /* Purpose & Mission */
+  .pl-purpose { grid-area: purpose; }
+  .pl-purpose .row { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+  .pl-purpose .row + .row { margin-top: 0; padding-top: 8px; border-top: 1px dashed var(--c-line); }
+  .pl-purpose .row .k {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--c-mute);
+  }
+  .pl-purpose .row .v {
+    font-family: var(--font-serif); font-size: 18px; line-height: 1.2;
+    color: var(--c-ink);
+  }
+  .pl-purpose .row .v em { font-style: italic; color: var(--c-forest); }
+  html.dark .pl-purpose .row .v em { color: var(--c-lime); }
+
+  /* Scope */
+  .pl-scope { grid-area: scope; justify-content: space-between; }
+  .pl-scope .scope-facts {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+    margin-bottom: 8px;
+  }
+  .pl-scope .scope-facts .k {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--c-mute); display: block; margin-bottom: 4px;
+  }
+  .pl-scope .scope-facts .v {
+    font-family: var(--font-serif); font-size: 18px; color: var(--c-ink); line-height: 1.2;
+  }
+  .pl-scope .verticals { display: flex; flex-direction: column; gap: 6px; }
+  .pl-scope .vrow {
+    display: grid; grid-template-columns: 110px 1fr 120px; gap: 12px;
+    align-items: center;
+    padding: 7px 10px;
+    border: 1px solid var(--c-line);
+    border-radius: 8px;
+    background: var(--c-bg);
+  }
+  .pl-scope .vrow .name {
+    font-family: var(--font-serif); font-size: 18px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .pl-scope .vrow .name .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .pl-scope .vrow.e .dot { background: var(--c-forest); }
+  .pl-scope .vrow.l .dot { background: var(--c-green); }
+  .pl-scope .vrow.c .dot { background: var(--c-lime); }
+  .pl-scope .vrow .desc { font-size: 12px; color: var(--c-ink-soft); line-height: 1.3; }
+  .pl-scope .vrow .mat {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--c-mute);
+    text-align: right;
+  }
+
+  /* Scope no-incluye band */
+  .pl-scope .exclude {
+    margin-top: 4px;
+    padding: 10px 12px;
+    border: 1px dashed var(--c-line);
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .pl-scope .exclude .k {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--c-mute);
+    margin-bottom: 3px;
+  }
+  .pl-scope .exclude .v {
+    font-size: 13px; color: var(--c-ink-soft); line-height: 1.3;
+  }
+  .pl-scope .exclude .v b {
+    font-family: var(--font-serif); font-weight: 400; font-size: 15px;
+    color: var(--c-ink);
+  }
+
+  /* Vision */
+  .pl-vision { grid-area: vision; justify-content: center; }
+  .pl-vision .quote {
+    font-family: var(--font-serif);
+    font-size: 26px; line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--c-ink);
+  }
+  .pl-vision .quote em { font-style: italic; color: var(--c-forest); }
+  html.dark .pl-vision .quote em { color: var(--c-lime); }
+
+  /* Values */
+  .pl-values { grid-area: values; }
+  .pl-values .vlist {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 8px;
+  }
+  .pl-values .v-item { flex: 1; }
+  .pl-values .v-item {
+    padding: 8px 12px;
+    border: 1px solid var(--c-line);
+    border-radius: 8px;
+    background: var(--c-bg);
+    display: flex; flex-direction: column; gap: 3px;
+    position: relative;
+  }
+  .pl-values .v-item .n {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em;
+    color: var(--c-mute);
+  }
+  .pl-values .v-item .from {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--c-mute);
+  }
+  .pl-values .v-item .to {
+    font-family: var(--font-serif); font-size: 20px; line-height: 1.05;
+    color: var(--c-ink);
+  }
+  .pl-values .v-item .to em { font-style: italic; color: var(--c-forest); }
+  html.dark .pl-values .v-item .to em { color: var(--c-lime); }
+  .pl-values .v-item .d {
+    font-size: 11px; line-height: 1.35;
+    color: var(--c-ink-soft);
+  }
+
+  /* Objectives */
+  .pl-objectives { grid-area: objectives; }
+  .pl-objectives .obj-list {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 8px;
+  }
+  .pl-objectives .obj-item { flex: 1; }
+  .pl-objectives .obj-item {
+    padding: 10px 12px;
+    border: 1px solid var(--c-line);
+    border-radius: 10px;
+    background: var(--c-bg);
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .pl-objectives .obj-item .nm {
+    display: flex; gap: 8px; align-items: flex-start;
+  }
+  .pl-objectives .obj-item .n {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em;
+    color: var(--c-forest); margin-top: 2px; font-weight: 600;
+  }
+  html.dark .pl-objectives .obj-item .n { color: var(--c-lime); }
+  .pl-objectives .obj-item .t {
+    font-family: var(--font-serif); font-size: 16px; line-height: 1.1;
+    color: var(--c-ink); flex: 1;
+  }
+  .pl-objectives .obj-item .kr {
+    font-size: 11px; line-height: 1.35;
+    color: var(--c-ink-soft);
+    padding-top: 4px;
+    border-top: 1px solid var(--c-line);
+  }
+  .pl-objectives .obj-item .kr b {
+    font-family: var(--font-mono); font-weight: 500;
+    font-size: 9px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--c-mute);
+    display: block; margin-bottom: 2px;
+  }
+
+  /* Roadmap */
+  .pl-roadmap { grid-area: roadmap; }
+  .pl-roadmap .timeline {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+    margin-top: 2px;
+    position: relative;
+    flex: 1;
+  }
+  .pl-roadmap .timeline::before {
+    content: ""; position: absolute;
+    left: 16px; right: 16px; top: 12px;
+    height: 1.5px; background: var(--c-line);
+  }
+  .pl-roadmap .ph {
+    position: relative;
+    padding-top: 28px;
+    padding-left: 6px;
+  }
+  .pl-roadmap .ph::before {
+    content: ""; position: absolute;
+    top: 5px; left: 6px;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--c-paper);
+    border: 2.5px solid var(--c-forest);
+  }
+  .pl-roadmap .ph.p2::before { border-color: var(--c-green); }
+  .pl-roadmap .ph.p3::before { border-color: var(--c-lime); }
+  .pl-roadmap .ph.p4::before { border-color: var(--c-green); }
+  .pl-roadmap .ph.p5::before { border-color: var(--c-forest); }
+  .pl-roadmap .ph.p6::before { background: var(--c-forest); }
+  html.dark .pl-roadmap .ph.p6::before { background: var(--c-lime); border-color: var(--c-lime); }
+  .pl-roadmap .ph .pn {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em;
+    color: var(--c-mute); margin-bottom: 2px;
+  }
+  .pl-roadmap .ph .pt {
+    font-family: var(--font-serif); font-size: 22px; line-height: 1.0;
+    color: var(--c-ink); margin-bottom: 6px;
+  }
+  .pl-roadmap .ph .pd {
+    font-size: 11px; line-height: 1.4;
+    color: var(--c-ink-soft);
+  }
+
+  /* Clients */
+  .pl-clients { grid-area: clients; }
+  .pl-clients .c-grid {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 6px;
+  }
+  .pl-clients .c-item { flex: 1; }
+  .pl-clients .c-item {
+    display: flex; gap: 10px; align-items: flex-start;
+    padding: 8px 10px;
+    border: 1px solid var(--c-line);
+    border-radius: 8px;
+    background: var(--c-bg);
+  }
+  .pl-clients .c-item .av {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--c-forest); color: var(--c-paper);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-serif); font-size: 14px;
+    flex-shrink: 0;
+  }
+  .pl-clients .c-item .av.lime { background: var(--c-lime); color: var(--c-forest); }
+  .pl-clients .c-item .av.mid { background: var(--c-green); }
+  .pl-clients .c-item .who {
+    font-family: var(--font-serif); font-size: 15px; line-height: 1.05;
+    color: var(--c-ink);
+  }
+  .pl-clients .c-item .who .p {
+    font-family: var(--font-sans); font-size: 10px; color: var(--c-mute); font-weight: 500;
+    display: block; margin-top: 1px;
+  }
+  .pl-clients .c-item .need {
+    font-size: 10.5px; line-height: 1.3;
+    color: var(--c-ink-soft);
+    margin-top: 3px;
+  }
+  .pl-clients .sponsor {
+    margin-top: 6px;
+    padding: 8px 12px;
+    background: var(--c-lime-soft);
+    border-radius: 8px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  html.dark .pl-clients .sponsor { background: rgba(106,191,42,0.15); }
+  .pl-clients .sponsor .k {
+    font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--c-forest);
+  }
+  html.dark .pl-clients .sponsor .k { color: var(--c-lime); }
+  .pl-clients .sponsor .v {
+    font-family: var(--font-serif); font-size: 17px; color: var(--c-ink);
+  }
+  .pl-clients .sponsor .role { font-size: 11px; color: var(--c-ink-soft); }
+
+  /* KPIs */
+  .pl-kpis { grid-area: kpis; }
+  .pl-kpis .kgrid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    flex: 1;
+  }
+  .pl-kpis .k {
+    padding: 10px;
+    background: var(--c-bg);
+    border: 1px solid var(--c-line);
+    border-radius: 8px;
+    display: flex; flex-direction: column; gap: 4px;
+    justify-content: space-between;
+  }
+  .pl-kpis .k.hi {
+    background: var(--c-forest);
+    color: var(--c-paper);
+    border-color: var(--c-forest);
+  }
+  html.dark .pl-kpis .k.hi { background: var(--c-lime); color: #07291a; border-color: var(--c-lime); }
+  .pl-kpis .k .val {
+    font-family: var(--font-serif); font-size: 42px; line-height: 0.9;
+    color: var(--c-ink);
+    letter-spacing: -0.02em;
+  }
+  .pl-kpis .k .val em { font-style: italic; color: var(--c-forest); }
+  html.dark .pl-kpis .k .val em { color: var(--c-lime); }
+  .pl-kpis .k.hi .val { color: var(--c-paper); }
+  .pl-kpis .k.hi .val em { color: var(--c-lime); }
+  html.dark .pl-kpis .k.hi .val { color: #07291a; }
+  html.dark .pl-kpis .k.hi .val em { color: var(--c-forest); }
+  .pl-kpis .k .lbl {
+    font-size: 10.5px; line-height: 1.3;
+    color: var(--c-ink-soft);
+  }
+  .pl-kpis .k.hi .lbl { color: var(--c-paper); opacity: 0.9; }
+  html.dark .pl-kpis .k.hi .lbl { color: #07291a; }
+  .pl-kpis .k .sub {
+    font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--c-mute);
+  }
+  .pl-kpis .k.hi .sub { color: var(--c-paper); opacity: 0.7; }
+  html.dark .pl-kpis .k.hi .sub { color: #07291a; opacity: 0.7; }
+
+
+  /* Bottom mountain ridge (decorative) */
+  .ridge {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 180px;
+    pointer-events: none;
+    opacity: 0.18;
+    z-index: 0;
+  }
+  html.dark .ridge { opacity: 0.3; }
+
+  /* ============ Theme toggle ============ */
+  .theme-toggle {
+    position: fixed;
+    bottom: 18px; right: 18px;
+    z-index: 100;
+    background: #fbf9f2;
+    border: 1px solid #d8d2c0;
+    color: #0d1f14;
+    padding: 10px 16px;
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  html.dark .theme-toggle {
+    background: #0f1c15;
+    border-color: #1f3024;
+    color: #f0ead6;
+  }
+
+  /* ============ PRINT ============ */
+  @page { size: A3 landscape; margin: 0; }
+  @media print {
+    body { background: white; padding: 0; }
+    .stage { transform: none !important; }
+    .page { box-shadow: none; }
+    .theme-toggle { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="stage" id="stage">
+  <div class="page" id="page">
+    <!-- =========== HEADER =========== -->
+    <header class="pg-header">
+      <div class="left">
+        <div class="top-row">
+          <div class="logo"><img src="avilatek.png" alt="Avila Tek" /></div>
+          <div class="pill">PMO Charter · One-pager</div>
+        </div>
+        <h1>PMO <em>Charter</em></h1>
+      </div>
+      <div class="meta">
+        <div class="stripe">
+          <div class="cell">
+            <div class="label">Versión</div>
+            <div class="value">1.0</div>
+          </div>
+          <div class="cell">
+            <div class="label">Período</div>
+            <div class="value"><em>Q2</em> 2026</div>
+          </div>
+          <div class="cell">
+            <div class="label">Vigente desde</div>
+            <div class="value">Mayo 2026</div>
+          </div>
+          <div class="cell">
+            <div class="label">Próxima revisión</div>
+            <div class="value">Q3 2026</div>
+          </div>
+        </div>
+        <div class="dept">Dirección de Productos · Avila Tek</div>
+      </div>
+    </header>
+
+    <!-- =========== BODY =========== -->
+    <main class="pg-body">
+
+      <!-- 01 Propósito & Misión -->
+      <section class="panel pl-purpose">
+        <div class="panel-head">
+          <div class="badge">01</div>
+          <div class="panel-title">Propósito y Misión</div>
+          <div class="panel-sub">Por qué existimos</div>
+        </div>
+        <div class="row">
+          <span class="k">Propósito</span>
+          <span class="v">Ser el <em>puente</em> entre la estrategia de Avila Tek y la ejecución de sus proyectos — maximizando valor para el cliente y rentabilidad de la organización.</span>
+        </div>
+        <div class="row">
+          <span class="k">Misión</span>
+          <span class="v">Habilitar <em>resultados de alto impacto</em> mediante gobernanza, ownership y servicios orientados a valor — no como función de control y reporte.</span>
+        </div>
+      </section>
+
+      <!-- 02 Alcance -->
+      <section class="panel pl-scope">
+        <div class="panel-head">
+          <div class="badge">02</div>
+          <div class="panel-title">Alcance de Cobertura</div>
+          <div class="panel-sub">Dónde operamos</div>
+        </div>
+        <div class="scope-facts">
+          <div><span class="k">Nivel</span><div class="v">Departamental · Dirección de Productos</div></div>
+          <div><span class="k">Modelo</span><div class="v">Híbrido · estándar + adaptación</div></div>
+        </div>
+        <div class="verticals">
+          <div class="vrow e">
+            <div class="name"><span class="dot"></span>Enterprise</div>
+            <div class="desc">Desarrollo de software para clientes corporativos</div>
+            <div class="mat">Activa · Alta</div>
+          </div>
+          <div class="vrow l">
+            <div class="name"><span class="dot"></span>Landscape</div>
+            <div class="desc">Proyectos de alta complejidad y ciclos especializados</div>
+            <div class="mat">Instalación · Q2</div>
+          </div>
+          <div class="vrow c">
+            <div class="name"><span class="dot"></span>Consulting</div>
+            <div class="desc">Engagements de consultoría y servicios paquetizados</div>
+            <div class="mat">Instalación · Q2</div>
+          </div>
+        </div>
+        <div class="exclude">
+          <div>
+            <div class="k">No incluye</div>
+            <div class="v"><b>Decisiones comerciales</b> · pricing · definición de oferta</div>
+          </div>
+          <div>
+            <div class="k">Responsable</div>
+            <div class="v"><b>Pre-ventas</b> y <b>Dirección</b></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 03 Visión -->
+      <section class="panel pl-vision">
+        <div class="panel-head">
+          <div class="badge">03</div>
+          <div class="panel-title">Visión PMO</div>
+          <div class="panel-sub">A dónde vamos</div>
+        </div>
+        <div class="quote">Ser la unidad que <em>hace posible</em> el crecimiento — capaz de demostrar con datos que la gestión disciplinada de proyectos es una <em>ventaja competitiva real</em>, reduciendo la dependencia de individuos clave.</div>
+      </section>
+
+      <!-- 04 Core Values -->
+      <section class="panel pl-values">
+        <div class="panel-head">
+          <div class="badge">04</div>
+          <div class="panel-title">Core Values PMO</div>
+          <div class="panel-sub">Cómo actuamos</div>
+        </div>
+        <div class="vlist">
+          <div class="v-item">
+            <div class="to"><em>Accountability</em> de Entrega</div>
+            <div class="d">No solo cumplimos tareas — somos dueños del resultado final.</div>
+          </div>
+          <div class="v-item">
+            <div class="to">Criterio y <em>Detalle</em></div>
+            <div class="d">En creación de productos, liderazgo, procesos y reporte.</div>
+          </div>
+          <div class="v-item">
+            <div class="to"><em>Visibilidad</em></div>
+            <div class="d">La honestidad técnica y de gestión es nuestra base para generar confianza.</div>
+          </div>
+          <div class="v-item">
+            <div class="to">Anticipación <em>Estratégica</em></div>
+            <div class="d">No reaccionamos al fuego — diseñamos cortafuegos.</div>
+          </div>
+          <div class="v-item">
+            <div class="to">Mentalidad de <em>Iteración</em></div>
+            <div class="d">El aprendizaje se mide en la mejora del producto, del proceso y del equipo.</div>
+          </div>
+          <div class="v-item">
+            <div class="to">Co-creación con el <em>Cliente</em></div>
+            <div class="d">El cliente no es un espectador — es parte del equipo de construcción.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 05 Objetivos -->
+      <section class="panel pl-objectives">
+        <div class="panel-head">
+          <div class="badge">05</div>
+          <div class="panel-title">Objetivos · Q2 2026</div>
+          <div class="panel-sub">Cuatro resultados clave</div>
+        </div>
+        <div class="obj-list">
+          <div class="obj-item">
+            <div class="nm">
+              <span class="n">01</span>
+              <div class="t">Visión estratégica definida y comunicada</div>
+            </div>
+            <div class="kr"><b>Resultado clave</b>Charter aprobado + comunicado a PMO, Landscape y Diseño.</div>
+          </div>
+          <div class="obj-item">
+            <div class="nm">
+              <span class="n">02</span>
+              <div class="t">Diagnóstico de costos Enterprise: optimización y medición</div>
+            </div>
+            <div class="kr"><b>Resultado clave</b>Proyectos y asignaciones optimizadas + baseline de costo medido.</div>
+          </div>
+          <div class="obj-item">
+            <div class="nm">
+              <span class="n">03</span>
+              <div class="t">Sistema de monitoreo activo en las 3 verticales</div>
+            </div>
+            <div class="kr"><b>Resultado clave</b>100% proyectos con semáforo semanal + alertas documentadas.</div>
+          </div>
+          <div class="obj-item">
+            <div class="nm">
+              <span class="n">04</span>
+              <div class="t">Medirnos como equipo y como proyectos</div>
+            </div>
+            <div class="kr"><b>Resultado clave</b>KPIs por rol activos + reducción de desviaciones + rentabilidad medible.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 06 Roadmap (full width) -->
+      <section class="panel pl-roadmap">
+        <div class="panel-head">
+          <div class="badge">06</div>
+          <div class="panel-title">Roadmap de Implementación · Q2 2026</div>
+          <div class="panel-sub">Cómo aterrizamos</div>
+        </div>
+        <div class="timeline">
+          <div class="ph p1">
+            <div class="pt">Mandato</div>
+            <div class="pd">Charter aprobado + clientes internos mapeados.</div>
+          </div>
+          <div class="ph p2">
+            <div class="pt">Estrategia</div>
+            <div class="pd">Modelo de servicios + ownership del PM + mínimos organizativos.</div>
+          </div>
+          <div class="ph p3">
+            <div class="pt">Gobernanza</div>
+            <div class="pd">Procesos, roles y estándares PMO definidos para las 3 verticales.</div>
+          </div>
+          <div class="ph p4">
+            <div class="pt">Implementación</div>
+            <div class="pd">Visión comunicada + herramientas activas + primeros pilotos.</div>
+          </div>
+          <div class="ph p5">
+            <div class="pt">Monitoreo</div>
+            <div class="pd">Semáforo activo en 3 verticales + primera lectura en L10.</div>
+          </div>
+          <div class="ph p6">
+            <div class="pt">Feedback</div>
+            <div class="pd">Primer ciclo documentado + servicios priorizados para Q3.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 07 Clientes Internos -->
+      <section class="panel pl-clients">
+        <div class="panel-head">
+          <div class="badge">07</div>
+          <div class="panel-title">Clientes Internos</div>
+          <div class="panel-sub">A quién servimos</div>
+        </div>
+        <div class="c-grid">
+          <div class="c-item">
+            <div class="av">D</div>
+            <div><div class="who">Dirección / C-Level</div><div class="need">Visibilidad estratégica del portafolio para decidir con datos.</div></div>
+          </div>
+          <div class="c-item">
+            <div class="av mid">P</div>
+            <div><div class="who">Pre-ventas</div><div class="need">Datos reales de capacidad y tiempos para proponer realista.</div></div>
+          </div>
+          <div class="c-item">
+            <div class="av lime">PM</div>
+            <div><div class="who">PMs del equipo</div><div class="need">Metodología clara, herramientas y sistema de escalación.</div></div>
+          </div>
+          <div class="c-item">
+            <div class="av">L</div>
+            <div><div class="who">Landscape</div><div class="need">Proceso PMO adaptado a su vertical + soporte operativo.</div></div>
+          </div>
+          <div class="c-item">
+            <div class="av mid">C</div>
+            <div><div class="who">Consulting</div><div class="need">Estructura PMO para engagements paquetizados y offer cards.</div></div>
+          </div>
+          <div class="c-item">
+            <div class="av lime">Di</div>
+            <div><div class="who">Diseño</div><div class="need">Gestión de prioridades y capacidad sin interrupciones.</div></div>
+          </div>
+          <div class="c-item">
+            <div class="av">T</div>
+            <div><div class="who">Tecnología</div><div class="need">Planes alineados con la realidad técnica desde el inicio.</div></div>
+          </div>
+        </div>
+        <div class="sponsor">
+          <div>
+            <div class="k">Patrocinadora ejecutiva</div>
+            <div class="v">Ivanna Padrón <span class="role">— Directora de Productos</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 08 KPIs -->
+      <section class="panel pl-kpis">
+        <div class="panel-head">
+          <div class="badge">08</div>
+          <div class="panel-title">Criterios de Éxito · KPIs</div>
+          <div class="panel-sub">Cómo medimos · Revisión semanal en L10</div>
+        </div>
+        <div class="kgrid">
+          <div class="k hi">
+            <div class="sub">Obj 01 · Visión</div>
+            <div class="val"><em>✓</em></div>
+            <div class="lbl">Charter aprobado y comunicado al equipo</div>
+          </div>
+          <div class="k">
+            <div class="sub">Obj 02 · Portafolio</div>
+            <div class="val"><em>↑ ROI</em></div>
+            <div class="lbl">Monitoreo activo + aumento de rentabilidad</div>
+          </div>
+          <div class="k">
+            <div class="sub">Obj 02 · Desviación</div>
+            <div class="val"><em>↓ %</em></div>
+            <div class="lbl">Reducción de desviaciones en plazo y costo</div>
+          </div>
+          <div class="k">
+            <div class="sub">Obj 03 · Scorecards</div>
+            <div class="val"><em>100%</em></div>
+            <div class="lbl">Proyectos de 3 verticales con scorecard semanal</div>
+          </div>
+          <div class="k">
+            <div class="sub">Obj 04 · Ownership</div>
+            <div class="val"><em>✓</em></div>
+            <div class="lbl">Mínimos por rol definidos y en uso</div>
+          </div>
+          <div class="k">
+            <div class="sub">Obj 04 · Resultados</div>
+            <div class="val"><em>0</em></div>
+            <div class="lbl">Alertas críticas sin dueño ni fecha</div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- decorative bottom ridge -->
+    <svg class="ridge" viewBox="0 0 1920 180" preserveAspectRatio="none">
+      <path d="M0,180 L0,120 L160,40 L320,110 L480,30 L640,100 L800,50 L960,110 L1120,40 L1280,100 L1440,50 L1600,110 L1760,40 L1920,100 L1920,180 Z" fill="var(--c-lime)" opacity="0.5"/>
+      <path d="M0,180 L0,140 L240,80 L480,140 L720,90 L960,150 L1200,80 L1440,140 L1680,90 L1920,140 L1920,180 Z" fill="var(--c-forest)" opacity="0.7"/>
+    </svg>
+
+  </div>
+</div>
+
+<button class="theme-toggle" id="themeToggle">Modo oscuro</button>
+
+<script>
+  // ---- Scale stage to fit viewport width ----
+  const stage = document.getElementById('stage');
+  const page = document.getElementById('page');
+  function fit() {
+    const PAD = 40;
+    const vw = window.innerWidth - PAD;
+    const scale = Math.min(vw / 1920, 1);
+    stage.style.transformOrigin = 'top left';
+    stage.style.transform = `scale(${scale})`;
+    stage.style.width = (1920 * scale) + 'px';
+    stage.style.height = (1920 * scale) + 'px';
+  }
+  window.addEventListener('resize', fit);
+  fit();
+
+  // ---- Theme toggle ----
+  const root = document.documentElement;
+  const tb = document.getElementById('themeToggle');
+  const stored = localStorage.getItem('pmo-onepager-theme');
+  if (stored === 'dark') { root.classList.add('dark'); tb.textContent = 'Modo claro'; }
+  tb.addEventListener('click', () => {
+    root.classList.toggle('dark');
+    const dk = root.classList.contains('dark');
+    tb.textContent = dk ? 'Modo claro' : 'Modo oscuro';
+    localStorage.setItem('pmo-onepager-theme', dk ? 'dark' : 'light');
+  });
+</script>
+
+</body>
+</html>
