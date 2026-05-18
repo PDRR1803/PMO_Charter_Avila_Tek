@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <title>PMO Charter · Onepager · Avila Tek</title>
-<link rel="icon" type="image/png" href="avilatek.png">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -293,7 +293,6 @@
     flex: 1;
     gap: 8px;
   }
-  .pl-values .v-item { flex: 1; }
   .pl-values .v-item {
     padding: 8px 12px;
     border: 1px solid var(--c-line);
@@ -301,6 +300,8 @@
     background: var(--c-bg);
     display: flex; flex-direction: column; gap: 3px;
     position: relative;
+    flex: 1;
+    justify-content: flex-start;
   }
   .pl-values .v-item .n {
     font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em;
@@ -329,13 +330,14 @@
     flex: 1;
     gap: 8px;
   }
-  .pl-objectives .obj-item { flex: 1; }
   .pl-objectives .obj-item {
     padding: 10px 12px;
     border: 1px solid var(--c-line);
     border-radius: 10px;
     background: var(--c-bg);
     display: flex; flex-direction: column; gap: 6px;
+    flex: 1;
+    justify-content: flex-start;
   }
   .pl-objectives .obj-item .nm {
     display: flex; gap: 8px; align-items: flex-start;
@@ -416,13 +418,13 @@
     flex: 1;
     gap: 6px;
   }
-  .pl-clients .c-item { flex: 1; }
   .pl-clients .c-item {
     display: flex; gap: 10px; align-items: flex-start;
     padding: 8px 10px;
     border: 1px solid var(--c-line);
     border-radius: 8px;
     background: var(--c-bg);
+    flex: 1;
   }
   .pl-clients .c-item .av {
     width: 28px; height: 28px; border-radius: 50%;
