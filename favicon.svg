@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="6" fill="#0e4d28"/>
+  <!-- three mountain peaks matching Avila Tek style -->
+  <polygon points="4,26 10,12 16,22 20,16 28,26" fill="none" stroke="#6abf2a" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+  <polygon points="4,26 10,12 16,22" fill="#6abf2a" opacity="0.25"/>
+  <polygon points="16,22 20,16 28,26" fill="#6abf2a" opacity="0.15"/>
+</svg>
